@@ -1,31 +1,221 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
+
 //
-void main() => runApp(MyApp());
+void main() {
+  runApp(new MaterialApp(
+    title: 'My app', // used by the OS task switcher
+    home: new MyButton(),
+  ));
+
+}
 //void main(){//主程序入口
 //  var stringTest="string";
 //  var stringTest1='string'+
 //  "ff";
 //
 //}
+//int testMethod5(String name,int age,{int a,String b,int c,String d}){
+//  return 6;
+//}
+
+///button的点击事件监听
+class MyButton extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+   return new GestureDetector(
+     onTap: (){
+           print("点击事件");
+     },
+     child: new Container(
+       height: 36.0,
+       padding: const EdgeInsets.all(8.0),
+       margin: const EdgeInsets.symmetric(horizontal: 8.0),
+       decoration: new BoxDecoration(
+         borderRadius: new BorderRadius.circular(5.0),
+         color: Colors.lightGreen[500],
+       ),
+       child: new Center(
+         child: new Text('Engage'),
+       ),
+     ),
+   );
+  }
+
+}
+
+/**
+ *自定义AppBar
+ */
+class MyAppBar extends StatelessWidget {
+  MyAppBar({this.title});
+  final Widget title;
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: new BoxDecoration(color: Colors.blue[500]),
+      child: new Row(
+        children: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.menu),
+            tooltip: 'Navigation menu',
+            onPressed: null, // null 会禁用 button
+          ),
+          // Expanded expands its child to fill the available space.
+          new Expanded(
+            child: title,
+          ),
+          new IconButton(
+            icon: new Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/***
+ * 界面的脚手架
+ */
+class MyScaffold extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Material 是UI呈现的“一张纸”
+    return new Material(
+      // Column is 垂直方向的线性布局.
+      child: new Column(
+        children: <Widget>[
+          new MyAppBar(
+            title: new Text(
+              'Example title',
+              style: Theme
+                  .of(context)
+                  .primaryTextTheme
+                  .title,
+            ),
+          ),
+          new Expanded(
+            child: new Center(
+              child: new Text('Hello, world!'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return new MaterialApp(
+      title: 'Welcome to Flutter',
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Welcome to Flutter'),
+        ),
+        body: new Center(
+          //child: new Text(wordPair.asPascalCase),
+          child: new RandomWords(),
+        ),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+
+// final wordPair=new WordPair.random();
+//    return MaterialApp(
+//      title: 'Flutter Demo',
+//      theme: ThemeData(
+//        // This is the theme of your application.
+//        //
+//        // Try running your application with "flutter run". You'll see the
+//        // application has a blue toolbar. Then, without quitting the app, try
+//        // changing the primarySwatch below to Colors.green and then invoke
+//        // "hot reload" (press "r" in the console where you ran "flutter run",
+//        // or simply save your changes to "hot reload" in a Flutter IDE).
+//        // Notice that the counter didn't reset back to zero; the application
+//        // is not restarted.
+//        primarySwatch: Colors.blue,
+//      ),
+//      home: MyHomePage(title: 'Flutter Demo Home Page'+new RandomWords().toString()),
+//    );
+//  }
+}
+
+///最小类继承自StatefulWidget
+class RandomWords extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new RandomWordsState();
+  }
+}
+
+class RandomWordsState extends State<RandomWords> {
+  final _suggestions = <WordPair>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0); //文字的样式
+  final _saved = new Set<WordPair>();
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Startup Name Generator'),
+      ),
+      body: _buildSuggestions(),
+    );
+  }
+
+//    final wordPair = new WordPair.random();
+//    return new Text(wordPair.asPascalCase);
+
+  Widget _buildSuggestions() {
+    return new ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        // 对于每个建议的单词对都会调用一次itemBuilder，然后将单词对添加到ListTile行中
+        // 在偶数行，该函数会为单词对添加一个ListTile row.
+        // 在奇数行，该函数会添加一个分割线widget，来分隔相邻的词对。
+        // 注意，在小屏幕上，分割线看起来可能比较吃力。
+        itemBuilder: (context, i) {
+          // 在每一列之前，添加一个1像素高的分隔线widget
+          if (i.isOdd) return new Divider();
+
+          // 语法 "i ~/ 2" 表示i除以2，但返回值是整形（向下取整），比如i为：1, 2, 3, 4, 5
+          // 时，结果为0, 1, 1, 2, 2， 这可以计算出ListView中减去分隔线后的实际单词对数量
+          final index = i ~/ 2;
+          // 如果是建议列表中最后一个单词对
+          if (index >= _suggestions.length) {
+            // ...接着再生成10个单词对，然后添加到建议列表
+            _suggestions.addAll(generateWordPairs().take(10));
+          }
+          return _buildRow(_suggestions[index]);
+        });
+  }
+
+  Widget _buildRow(WordPair pair) {
+    final alreadySaved = _saved.contains(pair);
+    return new ListTile(
+      title: new Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: new Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
     );
   }
 }
@@ -74,19 +264,63 @@ class _MyHomePageState extends State<MyHomePage> {
     /**
      * Dart学习
      */
-    var stringTest="string";
-    var stringTest1='string'+
-  "ff";
-    var stringTest2="""string46hfghfhfgh
-     ff""";
-
-    final changliang=9;
-     var test=testMethod4("",5,1,2,3,"");
+//    var stringTest="string";
+//    var stringTest1='string'+
+//  "ff";
+//    var stringTest2="""string46hfghfhfgh
+//     ff""";
+//
+//    final changliang=9;
+//     var test=testMethod4("",5,1,2,3,"");
 //    final changliang1=new DateTime(0).millisecondsSinceEpoch;
 //    const changliang2="";
 //    const changliang3=new DateTime().millisecondsSinceEpoch;
+//    var list=["A","B"];
+//    list..add(value)
+//    var fixedList=new List(5);
+//    fixedList.add(0);
+//    fixedList.length=0;
 
+//    var growableList=new List();
+//    growableList.add("A");
+//    var growableList1=const ["A","B"];
+//    growableList1.add("C");
+//    var set=Set();
+//    set.add("");
+//    var set1={'',""};
 
+//    int testMethod(name){
+//      return 6;
+//    }
+//    testMethod("");
+
+//    String test ;
+////    test++;
+////    test--;
+////    test--;
+////    test=null;
+////    test?.length;
+//       var intType=0;
+//       var stringType=intType as String;
+//
+//    var testA="A";
+//    var testB;
+//    testA??="A";
+//    testB??="B";
+
+//    double doubleTest = 5.5;
+//    int intTest = 5;
+//    var retultA = doubleTest~/2;
+//    var retultB = intTest~/2;
+
+//    int testInt=5;
+//    testInt.toUnsigned(5);
+//    testInt.isEven=true;
+//    testInt.floor();
+//
+//    testInt..toUnsigned(5)..isEven=true..floor();
+
+    //=========================================
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -114,11 +348,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:3 '+test.toString(),
+              'You have pushed the button this many times:retultA=',
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .display1,
             ),
           ],
         ),
@@ -131,17 +368,26 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-int testMethod(name){
+
+int testMethod(name) {
+  int testInnerMethod(String name) {
+    return 6;
+  }
+
+  testInnerMethod("");
   return 6;
 }
-int testMethod1(String name){
+
+int testMethod1(String name) {
   return 6;
 }
+
 int testMethod2(String name) => 0;
 
-int testMethod3(String name,int age,[int a,String b,int c,String d]){
+int testMethod3(String name, int age, [int a, String b, int c, String d]) {
   return 6;
 }
-int testMethod4(String name,int age,{int a,String b,int c,String d}){
+
+int testMethod4(String name, int age, {int a, String b, int c, String d}) {
   return 6;
 }
