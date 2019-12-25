@@ -5,10 +5,15 @@ import 'package:english_words/english_words.dart';
 void main() {
   runApp(new MaterialApp(
     title: 'My app', // used by the OS task switcher
-    home: new MyButton(),
+    home: new MyScaffold(),
   ));
 
 }
+
+
+
+
+
 //void main(){//主程序入口
 //  var stringTest="string";
 //  var stringTest1='string'+
@@ -44,9 +49,7 @@ class MyButton extends StatelessWidget{
 
 }
 
-/**
- *自定义AppBar
- */
+
 class MyAppBar extends StatelessWidget {
   MyAppBar({this.title});
   final Widget title;
@@ -84,48 +87,79 @@ class MyAppBar extends StatelessWidget {
 class MyScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Material 是UI呈现的“一张纸”
-    return new Material(
-      // Column is 垂直方向的线性布局.
-      child: new Column(
-        children: <Widget>[
-          new MyAppBar(
-            title: new Text(
-              'Example title',
-              style: Theme
-                  .of(context)
-                  .primaryTextTheme
-                  .title,
-            ),
-          ),
-          new Expanded(
-            child: new Center(
-              child: new Text('Hello, world!'),
-            ),
-          ),
-        ],
+    return Scaffold(
+      body: MyApp(),
+      appBar: AppBar(
+        title: new Text(
+          "这是我的flutter项目"
+        ),
       ),
     );
   }
 }
 
+
+
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Welcome to Flutter',
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Welcome to Flutter'),
-        ),
-        body: new Center(
-          //child: new Text(wordPair.asPascalCase),
-          child: new RandomWords(),
-        ),
+    Widget titleSection = new Container(
+      padding: const EdgeInsets.all(16.0),
+      child: new Row(
+        children: [
+          new Expanded(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                new Container(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: new Text(
+                    'Oeschinen Lake Campground',
+                    style: new TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                new Text(
+                  'Kandersteg, Switzerland',
+                  style: new TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          new Icon(
+            Icons.star,
+            color: Colors.red[500],
+          ),
+          new Image.asset("images/location_marker.png"),
+          new Text('41'),
+        ],
       ),
     );
+    return titleSection;
+    //...
   }
+}
+
+//class MyApp extends StatelessWidget {
+//  // This widget is the root of your application.
+//  @override
+//  Widget build(BuildContext context) {
+//    return new MaterialApp(
+//      title: 'Welcome to Flutter',
+//      home: new Scaffold(
+//        appBar: new AppBar(
+//          title: new Text('Welcome to Flutter'),
+//        ),
+//        body: new Center(
+//          //child: new Text(wordPair.asPascalCase),
+//          child: new RandomWords(),
+//        ),
+//      ),
+//    );
+//  }
 
 // final wordPair=new WordPair.random();
 //    return MaterialApp(
@@ -145,7 +179,7 @@ class MyApp extends StatelessWidget {
 //      home: MyHomePage(title: 'Flutter Demo Home Page'+new RandomWords().toString()),
 //    );
 //  }
-}
+//}
 
 ///最小类继承自StatefulWidget
 class RandomWords extends StatefulWidget {
