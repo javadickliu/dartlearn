@@ -1,3 +1,4 @@
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
@@ -7,12 +8,57 @@ void main() {
     title: 'My app', // used by the OS task switcher
     home: new MyScaffold(),
   ));
-
 }
 
+class AmapWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AmapView(
+      // 地图类型
+      mapType: MapType.Standard,
+      // 是否显示缩放控件
+      showZoomControl: true,
+      // 是否显示指南针控件
+      showCompass: true,
+      // 是否显示比例尺控件
+      showScaleControl: true,
+      // 是否使能缩放手势
+      zoomGesturesEnabled: true,
+      // 是否使能滚动手势
+      scrollGesturesEnabled: true,
+      // 是否使能旋转手势
+      rotateGestureEnabled: true,
+      // 是否使能倾斜手势
+      tiltGestureEnabled: true,
+      // 缩放级别
+      zoomLevel: 10,
+      // 中心点坐标
+      centerCoordinate: LatLng(39, 116),
+      // 标记
+      markers: <MarkerOption>[],
+      // 地图创建完成回调
+      onMapCreated: (controller) async {
+        // requestPermission是权限请求方法, 需要你自己实现
+        // 如果不知道怎么处理, 可以参考example工程的实现, example过程依赖了`permission_handler`插件.
+       // if (await requestPermission()) {
+          await controller.showMyLocation(true);
+        //}
+      },
+    );
+  }
+}
 
-
-
+//Future<bool> requestPermission() async {
+//  final permissions =
+//  await PermissionHandler().requestPermissions([PermissionGroup.location]);
+//
+//  if (permissions[PermissionGroup.location] == PermissionStatus.granted) {
+//    return true;
+//  } else {
+//    toast('需要定位权限!');
+//    return false;
+//  }
+//}
 
 //void main(){//主程序入口
 //  var stringTest="string";
@@ -25,34 +71,34 @@ void main() {
 //}
 
 ///button的点击事件监听
-class MyButton extends StatelessWidget{
+class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   return new GestureDetector(
-     onTap: (){
-           print("点击事件");
-     },
-     child: new Container(
-       height: 36.0,
-       padding: const EdgeInsets.all(8.0),
-       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-       decoration: new BoxDecoration(
-         borderRadius: new BorderRadius.circular(5.0),
-         color: Colors.lightGreen[500],
-       ),
-       child: new Center(
-         child: new Text('Engage'),
-       ),
-     ),
-   );
+    return new GestureDetector(
+      onTap: () {
+        print("点击事件");
+      },
+      child: new Container(
+        height: 36.0,
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: new BoxDecoration(
+          borderRadius: new BorderRadius.circular(5.0),
+          color: Colors.lightGreen[500],
+        ),
+        child: new Center(
+          child: new Text('Engage'),
+        ),
+      ),
+    );
   }
-
 }
-
 
 class MyAppBar extends StatelessWidget {
   MyAppBar({this.title});
+
   final Widget title;
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -88,17 +134,13 @@ class MyScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MyApp(),
+      body: AmapWidget(),
       appBar: AppBar(
-        title: new Text(
-          "这是我的flutter项目"
-        ),
+        title: new Text("这是我的flutter项目"),
       ),
     );
   }
 }
-
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -386,10 +428,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .display1,
+              style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
