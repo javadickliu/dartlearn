@@ -1,13 +1,28 @@
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter_app/ui/Test1Activity.dart';
 
 //
 void main() {
+  BaseOptions options = BaseOptions(
+    baseUrl: "https://www.baidu.com",
+    connectTimeout: 5000,
+    receiveTimeout: 3000,
+  );
+  Dio dio = new Dio(options);
+  dio.get("");
+  
+
+  
+  
+  
   runApp(new MaterialApp(
     title: 'My app', // used by the OS task switcher
     home: new MyScaffold(),
   ));
+
 }
 
 class AmapWidget extends StatelessWidget {
@@ -133,12 +148,7 @@ class MyAppBar extends StatelessWidget {
 class MyScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AmapWidget(),
-      appBar: AppBar(
-        title: new Text("这是我的flutter项目"),
-      ),
-    );
+    return FirstScreen();
   }
 }
 
