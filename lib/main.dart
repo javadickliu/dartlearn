@@ -3,9 +3,31 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter_app/ui/Test1Activity.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 //
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  checkPermission();
+  runApp(new MaterialApp(
+    title: 'My app', // used by the OS task switcher
+    home: new MyScaffold(),
+  ));
+}
+///检查权限
+checkPermission() async{
+
+  PermissionStatus permissionStatus =await
+  PermissionHandler().checkPermissionStatus(PermissionGroup.);
+  if(permissionStatus.toString()==PermissionStatus.disabled){
+      Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.location]);
+  }
+   // bool isOpened = await PermissionHandler().openAppSettings();
+   // print("PermissionGroup.location 权限是否获取"+future.toString());
+}
+///网络请求
+testDioHttp(){
   BaseOptions options = BaseOptions(
     baseUrl: "https://www.baidu.com",
     connectTimeout: 5000,
@@ -13,17 +35,8 @@ void main() {
   );
   Dio dio = new Dio(options);
   dio.get("");
-  
-
-  
-  
-  
-  runApp(new MaterialApp(
-    title: 'My app', // used by the OS task switcher
-    home: new MyScaffold(),
-  ));
-
 }
+
 
 class AmapWidget extends StatelessWidget {
   @override
@@ -55,8 +68,8 @@ class AmapWidget extends StatelessWidget {
       onMapCreated: (controller) async {
         // requestPermission是权限请求方法, 需要你自己实现
         // 如果不知道怎么处理, 可以参考example工程的实现, example过程依赖了`permission_handler`插件.
-       // if (await requestPermission()) {
-          await controller.showMyLocation(true);
+        // if (await requestPermission()) {
+        await controller.showMyLocation(true);
         //}
       },
     );
