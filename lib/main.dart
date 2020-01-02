@@ -2,6 +2,7 @@ import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter_app/bean/LoginBean.dart';
 import 'package:flutter_app/ui/Test1Activity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -33,23 +34,22 @@ testDioHttp() async {
     baseUrl: "https://api.xiaobeibike.com/",
     connectTimeout: 5000,
     receiveTimeout: 3000,
-    contentType:Headers.jsonContentType
+    contentType:Headers.jsonContentType,
+    responseType:  ResponseType.json
   );
   
-  Dio dio = new Dio(options);
+  var dio = new Dio(options);
   dio.interceptors.add(LogInterceptor(requestBody: true,responseBody: true));
-//  Map<String,dynamic> requestparams=Map<String,dynamic>();
-//  requestparams.putIfAbsent("account", "18665314150");
-//  requestparams.putIfAbsent("account", "18665314150");
-//  requestparams.putIfAbsent("account", "18665314150");
+
   var requestparams={"account":"18665314150","pwd":"123456","cid":"f79764e5e757315373c81a613ec26359"};
   Response response = await dio.post("Api/Operation/Login/",data: requestparams);
-  print("testDioHttp"+response.data.toString());
+//  var jsonData=response.data
+ // print("testDioHttp  jsonData" +jsonData.toString());
   //todo 1.dio默认的contentype是application/json 2.data 把请求参数放在data属性 如果请求参数要拼接在url可以设置queryParameters属性
   //todo 2.了解Response的属性含义
   //todo 3.取消http请求 利用CancleToken
   //todo 4.解析相应body 好像现在dio不能直接添加回调解析json 需要获取字符串后解析
-
+  //todo 5.dart bean类的格式
 }
 
 class AmapWidget extends StatelessWidget {
