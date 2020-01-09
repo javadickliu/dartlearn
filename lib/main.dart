@@ -1,8 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter_app/bean/LoginBean.dart';
+import 'package:flutter_app/packagelearn/PackageOne.dart';
+import 'package:flutter_app/packagelearn/PackageTwo.dart' as PackageTwo;
 import 'package:flutter_app/ui/Test1Activity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -37,10 +42,36 @@ testDioHttp() async {
     contentType:Headers.jsonContentType,
     responseType:  ResponseType.json
   );
-  
-  var dio = new Dio(options);
-  dio.interceptors.add(LogInterceptor(requestBody: true,responseBody: true));
 
+  PackageOneClass packageOneClass=PackageOneClass();
+  PackageTwo.PackageOneClass packageOneClass1=PackageTwo.PackageOneClass();
+
+//var intType=const [];
+
+//int intType1=1;
+//  final intType2;
+//  final int intType13=1;
+//dynamic intType4=1;
+
+//  var list = ['apples', 'bananas', 'oranges'];
+//  list.forEach(f)
+  var dio = new Dio(options);
+
+  dio.interceptors.add(LogInterceptor(requestBody: true,responseBody: true));
+  try{
+  //  throw HttpException("DDDD");
+    throw FormatException("DDDD");
+  }on IOException{
+       print(" on IOException");
+  } on FormatException catch(e){
+    print(" on FormatException e="+e.toString());
+  } catch(e){
+    print(" catch AllException");
+  }finally{
+    print(" finally  AllException");
+  }
+//  throw Exception("this is a excption");
+//  throw "";
   var requestparams={"account":"18665314150","pwd":"123456","cid":"f79764e5e757315373c81a613ec26359"};
   Response response = await dio.post("Api/Operation/Login/",data: requestparams);
 //  var jsonData=response.data
@@ -51,6 +82,7 @@ testDioHttp() async {
   //todo 4.解析相应body 好像现在dio不能直接添加回调解析json 需要获取字符串后解析
   //todo 5.dart bean类的格式
 }
+
 
 class AmapWidget extends StatelessWidget {
   @override
