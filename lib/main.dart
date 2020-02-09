@@ -6,8 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter_app/bean/LoginBean.dart';
+import 'package:flutter_app/darlearn/dartlearn.dart';
 import 'package:flutter_app/packagelearn/PackageOne.dart';
 import 'package:flutter_app/packagelearn/PackageTwo.dart' as PackageTwo;
+import 'package:flutter_app/darlearn/dartlearn.dart' as DartLearPoint;
 import 'package:flutter_app/ui/Test1Activity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -16,6 +18,16 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   testDioHttp();
   checkPermission();
+  //===================dar语言学习=======
+
+  var point=new DartLearPoint.Point.origin(1,3);
+  point.x=0;
+  assert(point.x==4);
+
+  assert(Color.red.index == 0);
+  List<Color> colors = Color.values;
+  assert(colors[2] == Color.blue);
+//==============================
   runApp(new MaterialApp(
     title: 'My app', // used by the OS task switcher
     home: new MyScaffold(),
